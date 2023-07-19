@@ -9,8 +9,8 @@ class DBLP:
         self.graph: nx.Graph = graph
         
         # Dictionaries to store node numbers and corresponding IDs
-        self.id_to_node: dict = {} # Dictionary linking pubblication or author to relative node number
-        self.node_to_id: dict = {} # Dictionary linking node number to relative pubblication or author
+        self.data_id_to_node_id: dict = {} # Dictionary linking pubblication or author to relative node number
+        self.node_id_to_data_id: dict = {} # Dictionary linking node number to relative pubblication or author
 
         self.dataset: str = dataset # dataset name
     
@@ -28,11 +28,14 @@ class DBLP:
 
     # Function to add a node to the graph and update dictionaries
     def add_node_to_graph_bipartite(self, id: str, isPublication: bool, labels: dict = None):
-        if id not in self.id_to_node:
-            node = len(self.id_to_node) # Get node number
+        if id not in self.data_id_to_node_id:
+            node = len(self.data_id_to_node_id) # Get node number
             
-            self.id_to_node[id] = node
-            self.node_to_id[node] = id
+            # Key Data id (author name or publication id) Value node id
+            self.data_id_to_node_id[id] = node
+
+            # Key Node id (number) Value author name or publication id
+            self.node_id_to_data_id[node] = id
 
             if isPublication:
                 self.graph.add_node(node, bipartite=0, labels=labels) # Add node of publication
@@ -74,7 +77,7 @@ class DBLP:
                 self.add_node_to_graph_bipartite(id=author, isPublication=False, labels=None)
 
                 # Add unidrected edge between author and publication
-                self.graph.add_edge(self.id_to_node[author], self.id_to_node[publication])
+                self.graph.add_edge(self.data_id_to_node_id[author], self.data_id_to_node_id[publication])
         
         print(f"Graph created! {self.graph}")
     
@@ -93,15 +96,15 @@ class DBLP:
                 and self.graph.degree[publication] == 1 # Check if node has only one author (i.e. one indegree)
             ):
                 # Get node of author who written the publication by himself
-                author = list(self.graph[publication])[0]
+                author_node_id = list(self.graph[publication])[0]
                 # Add author to dict or increment count of publications who written by himself
-                authors_count[author] = authors_count.get(author, 0) + 1
+                authors_count[author_node_id] = authors_count.get(author_node_id, 0) + 1
 
         # Get the maximum number of publications written by a single author
         max_publications_count = max(authors_count.values(), default=0)
         
         # Return all author who written the maximum number of publications by himself
-        return [(self.node_to_id[author], count) for author, count in authors_count.items() if count == max_publications_count]
+        return [(self.node_id_to_data_id[author_node_id], count) for author_node_id, count in authors_count.items() if count == max_publications_count]
 
     # Function to return exact diameter of graph
     def ex_2(self, threshold_year: int):
@@ -168,7 +171,7 @@ def main():
     path = './DBLP/'
     files_name = ['out-dblp_article', 'out-dblp_book', 'out-dblp_incollection', 'out-dblp_inproceedings', 'out-dblp_mastersthesis', 'out-dblp_phdthesis', 'out-dblp_proceedings']
     datasets_name = ['article', 'book', 'incollection', 'inproceedings', 'mastersthesis', 'phdthesis', 'proceedings']
-    dblp = [DBLP(graph=nx.Graph(), dataset=dataset_name) for _, dataset_name in zip(files_name, datasets_name)]
+    dblp_list = [DBLP(graph=nx.Graph(), dataset=dataset_name) for _, dataset_name in zip(files_name, datasets_name)]
     
     nrows = None
     for i, file_name in enumerate(files_name):
@@ -180,7 +183,7 @@ def main():
         # Remove rows with NaN values in the 'author' field
         data.dropna(subset=['author'], inplace=True)
 
-        dblp[i].create_graph_bipartite(data)
+        dblp_list[i].create_graph_bipartite(data)
 
         '''
         # Exercise 1
@@ -204,21 +207,23 @@ def main():
         print("--------------------------------------------")
 
     # Crate union graph renaming nodes Graph.clear()
-    union_graph: nx.Graph() = nx.union_all([dblp_dataset.graph for dblp_dataset in dblp], datasets_name)
+    union_graph: nx.Graph() = nx.union_all([dblp_dataset.graph for dblp_dataset in dblp_list], datasets_name)
     union_dblp = DBLP(graph=union_graph)
     print(f"Union graph created! {union_dblp.graph}")
 
     # Merge dictionaries in union graph 
-    for dblp_dataset, dataset_name in zip(dblp, datasets_name):
+    for dblp_dataset, dataset_name in zip(dblp_list, datasets_name):
+
+        # clear graph to free ram memory space
         dblp_dataset.graph.clear()
         
         dataset_renew = {}
-        for key in dblp_dataset.node_to_id:
+        for key in dblp_dataset.node_id_to_data_id:
             dataset_renew[key] = dataset_name + str(key)
-        dblp_dataset.node_to_id = dict((dataset_renew[key], value) for (key, value) in dblp_dataset.node_to_id.items())
+        dblp_dataset.node_id_to_data_id = dict((dataset_renew[key], value) for (key, value) in dblp_dataset.node_id_to_data_id.items())
 
-    for dblp_dataset in dblp:
-        union_dblp.node_to_id.update(dblp_dataset.node_to_id)
+    for dblp_dataset in dblp_list:
+        union_dblp.node_id_to_data_id.update(dblp_dataset.node_id_to_data_id)
 
 
     '''
