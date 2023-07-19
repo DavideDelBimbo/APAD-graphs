@@ -94,32 +94,32 @@ class DBLP:
     # Function to return exact diameter of graph
     def ex_2(self, threshold_year: int):
         # Find the largest connected component
-        largest_connected_component_subgraph = nx.subgraph(self.graph, max(nx.connected_components(self.graph), key=len))
+        graph_largest_component = nx.subgraph(self.graph, max(nx.connected_components(self.graph), key=len))
 
         # Get node with maximum degree to start algorithm
-        u = max(nx.degree(largest_connected_component_subgraph), key = lambda x : x[1])[0]
+        u_node_maximum_degree = max(nx.degree(graph_largest_component), key = lambda x : x[1])[0]
 
         # Set lower bound and upper bound O(|V| + |E|)
-        level = nx.eccentricity(largest_connected_component_subgraph, v=u)
-        lower_bound = level
-        upper_bound = 2 * level
+        i_level = nx.eccentricity(graph_largest_component, v=u_node_maximum_degree)
+        lower_bound = i_level
+        upper_bound = 2*i_level
 
         while upper_bound > lower_bound:
             # Get all nodes at distance i from u
-            F_i = [node
-                   for node, distance in nx.shortest_path_length(largest_connected_component_subgraph, source=u, method='dijkstra').items()
-                   if distance == level
-                ]
+            F_nodes_distance_i_from_u = [node for node,
+                                          distance in nx.shortest_path_length(graph_largest_component,
+                                          source=u_node_maximum_degree, method='dijkstra').items() 
+                                        if distance == i_level]
 
             #Get maximum eccentrity from u in F_i
-            B_i = max([nx.eccentricity(largest_connected_component_subgraph, v=node) for node in F_i])
+            B_max_eccentrity_from_F_i = max([nx.eccentricity(graph_largest_component, v=node) for node in F_nodes_distance_i_from_u])
 
-            if max(lower_bound, B_i) > 2 * (level - 1):
-                return max(lower_bound, B_i)
+            if max(lower_bound, B_max_eccentrity_from_F_i) > 2 * (i_level - 1):
+                return max(lower_bound, B_max_eccentrity_from_F_i)
             else:
-                lower_bound = max(lower_bound, B_i)
-                upper_bound = 2 * (level - 1)
-            level = level-1
+                lower_bound = max(lower_bound, B_max_eccentrity_from_F_i)
+                upper_bound = 2 * (i_level - 1)
+            i_level = i_level-1
             print(f"Lower bound: {lower_bound} - Upper bound: {upper_bound}")
         return lower_bound
         
