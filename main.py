@@ -173,7 +173,7 @@ def main():
     datasets_name = ['article', 'book', 'incollection', 'inproceedings', 'mastersthesis', 'phdthesis', 'proceedings']
     dblp_list = [DBLP(graph=nx.Graph(), dataset=dataset_name) for _, dataset_name in zip(files_name, datasets_name)]
     
-    nrows = None
+    nrows = 40
     for i, file_name in enumerate(files_name):
         print(f"{file_name}\n\n") 
         # Read csv file and create pandas Serie
@@ -217,11 +217,14 @@ def main():
         # clear graph to free ram memory space
         dblp_dataset.graph.clear()
         
-        dataset_renew = {}
-        for key in dblp_dataset.node_id_to_data_id:
-            dataset_renew[key] = dataset_name + str(key)
-        dblp_dataset.node_id_to_data_id = dict((dataset_renew[key], value) for (key, value) in dblp_dataset.node_id_to_data_id.items())
-
+        # replace the old nodes id to new renamed nodes id
+        # for example mastersthesis graph nodes id are renamed as mastersthesisx, for each x belongs to N
+        mappings_from_old_node_id_to_new_node_id = {}
+        for node_id in dblp_dataset.node_id_to_data_id:
+            mappings_from_old_node_id_to_new_node_id[node_id] = dataset_name + str(node_id)
+        dblp_dataset.node_id_to_data_id = dict((mappings_from_old_node_id_to_new_node_id[node_id], value) for (node_id, value) in dblp_dataset.node_id_to_data_id.items())
+    
+    # Updates the node_id_to_data_id dictionary with the elements from every dblp_dataset node_id_to_data_id dictionary object
     for dblp_dataset in dblp_list:
         union_dblp.node_id_to_data_id.update(dblp_dataset.node_id_to_data_id)
 
