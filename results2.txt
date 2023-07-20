@@ -1,0 +1,388 @@
+Dataset: out-dblp_article
+
+Loading data...
+
+Graph created in 54.524672746658325 seconds! Graph with 5338788 nodes and 10210962 edges
+
+
+Results calculated in 5.89227032661438 seconds
+Author with the most publications written by himself until 2020:
+	-T. D. Wilson 0001: 347
+
+
+Finding diameter...
+Lower bound: 46 - Upper bound: 50
+Lower bound: 46 - Upper bound: 48
+Lower bound: 46 - Upper bound: 46
+Results calculated in 438.280558347702 seconds
+	Diameter for graph with publications until 2020: 46
+
+Results calcualted in 71.48201274871826 seconds
+Pair of publications sharing the most authors until 2020:
+	-('7834844', '8298828'): 287
+
+--------------------------------------------------
+
+Dataset: out-dblp_book
+
+Loading data...
+
+Graph created in 0.11075615882873535 seconds! Graph with 38269 nodes and 29039 edges
+
+
+Results calculated in 0.042246103286743164 seconds
+Author with the most publications written by himself until 2020:
+	-Andrew S. Tanenbaum: 20
+
+
+Finding diameter...
+Lower bound: 28 - Upper bound: 28
+Results calculated in 0.1548922061920166 seconds
+	Diameter for graph with publications until 2020: 28
+
+Results calcualted in 0.06007981300354004 seconds
+Pair of publications sharing the most authors until 2020:
+	-('6672462', '6674144'): 8
+
+--------------------------------------------------
+
+Dataset: out-dblp_incollection
+
+Loading data...
+
+Graph created in 0.41352081298828125 seconds! Graph with 140224 nodes and 138403 edges
+
+
+Results calculated in 0.1396784782409668 seconds
+Author with the most publications written by himself until 2020:
+	-Gerrit Bleumer: 71
+
+
+Finding diameter...
+Lower bound: 59 - Upper bound: 80
+Lower bound: 66 - Upper bound: 78
+Lower bound: 66 - Upper bound: 76
+Lower bound: 66 - Upper bound: 74
+Lower bound: 66 - Upper bound: 72
+Lower bound: 66 - Upper bound: 70
+Lower bound: 66 - Upper bound: 68
+Lower bound: 66 - Upper bound: 66
+Results calculated in 34.93998193740845 seconds
+	Diameter for graph with publications until 2020: 66
+
+Results calcualted in 0.2932305335998535 seconds
+Pair of publications sharing the most authors until 2020:
+	-('6678551', '6697156'): 16
+
+--------------------------------------------------
+
+Dataset: out-dblp_inproceedings
+
+Loading data...
+
+Graph created in 46.21912169456482 seconds! Graph with 5362529 nodes and 10682633 edges
+
+
+Results calculated in 5.751744031906128 seconds
+Author with the most publications written by himself until 2020:
+	-Ichiro Satoh: 116
+
+
+Finding diameter...
+Lower bound: 55 - Upper bound: 56
+	Diameter for graph with publications until 2020: 55
+
+Results calcualted in 108.89369344711304 seconds
+Pair of publications sharing the most authors until 2020:
+	-('4095546', '4099061'): 74
+
+--------------------------------------------------
+
+Dataset: out-dblp_mastersthesis
+
+Loading data...
+
+Graph created in 0.0035195350646972656 seconds! Graph with 42 nodes and 21 edges
+
+
+Results calculated in 0.0 seconds
+Author with the most publications written by himself until 2020:
+	-Tatu Yl�nen: 1
+	-Peter Van Roy: 1
+	-Jiwei Li: 1
+	-Martin Monperrus: 1
+	-Leo Liberti: 1
+	-Salim Perchy: 1
+	-Christian Schulte 0001: 1
+	-Liang Dai: 1
+	-Satyan R. Coorg: 1
+	-Rodrigo Pastl Pontes: 1
+	-Ruirui Li 0002: 1
+	-Santanu Sarma: 1
+	-Wangda Zhang: 1
+	-Adams Wei Yu: 1
+	-Salma Hosni Emam Mohamed Elmalaki: 1
+	-Vanessa C. Klaas: 1
+	-Kurt P. Brown: 1
+	-Rita Ley: 1
+	-Oliver Hoffmann 0002: 1
+	-Tolga Yurek: 1
+	-Stephan Vollmer: 1
+
+
+Finding diameter...
+	Diameter for graph with publications until 2020: 1
+
+Results calcualted in 0.0010006427764892578 seconds
+	-No pair of articles shares an author until 2020!
+
+--------------------------------------------------
+
+Dataset: out-dblp_phdthesis
+
+Loading data...
+
+Graph created in 0.5789153575897217 seconds! Graph with 219770 nodes and 110068 edges
+
+
+Results calculated in 0.30004191398620605 seconds
+Author with the most publications written by himself until 2020:
+	-Mohammad Jafari: 3
+
+
+Finding diameter...
+	Diameter for graph with publications until 2020: 4
+
+Results calcualted in 0.24741458892822266 seconds
+Pair of publications sharing the most authors until 2020:
+	-('4066', '5575'): 1
+	-('4346', '95784'): 1
+	-('4357', '95225'): 1
+	-('4371', '38974'): 1
+	-('4483', '98750'): 1
+	-('4573', '102263'): 1
+	-('4768', '4822'): 1
+	-('4844', '5039'): 1
+	-('4943', '5686'): 1
+	-('5026', '6030'): 1
+	-('5290', '94634'): 1
+	-('5870', '102070'): 1
+	-('5891', '51383'): 1
+	-('5982', '99969'): 1
+	-('6027', '73062'): 1
+	-('6185', '82465'): 1
+	-('6203', '92824'): 1
+	-('7101', '100160'): 1
+	-('7159', '88891'): 1
+	-('7165', '105745'): 1
+	-('7332', '80434'): 1
+	-('7379', '73276'): 1
+	-('7466', '12755'): 1
+	-('7481', '73288'): 1
+	-('7580', '96246'): 1
+	-('7589', '102474'): 1
+	-('7744', '24884'): 1
+	-('7787', '17305'): 1
+	-('7804', '25458'): 1
+	-('7819', '22479'): 1
+	-('8186', '23699'): 1
+	-('8393', '11846'): 1
+	-('8688', '33014'): 1
+	-('8965', '11838'): 1
+	-('9270', '27878'): 1
+	-('9380', '26731'): 1
+	-('9423', '22669'): 1
+	-('9448', '17562'): 1
+	-('9513', '13734'): 1
+	-('9678', '23782'): 1
+	-('9789', '16861'): 1
+	-('9858', '24097'): 1
+	-('9948', '31186'): 1
+	-('10256', '27231'): 1
+	-('10539', '24113'): 1
+	-('10754', '97243'): 1
+	-('10822', '12838'): 1
+	-('11136', '17717'): 1
+	-('11206', '15651'): 1
+	-('11690', '22471'): 1
+	-('11799', '23791'): 1
+	-('12622', '29963'): 1
+	-('12772', '19134'): 1
+	-('12970', '31832'): 1
+	-('13033', '93845'): 1
+	-('13507', '14525'): 1
+	-('13558', '28419'): 1
+	-('13864', '25232'): 1
+	-('13968', '27824'): 1
+	-('14609', '20894'): 1
+	-('14650', '21189'): 1
+	-('14699', '27993'): 1
+	-('15179', '21822'): 1
+	-('15705', '25501'): 1
+	-('15919', '21436'): 1
+	-('16169', '16702'): 1
+	-('16281', '27257'): 1
+	-('16431', '26421'): 1
+	-('16486', '19672'): 1
+	-('16796', '20165'): 1
+	-('16936', '27354'): 1
+	-('17004', '17900'): 1
+	-('17207', '18699'): 1
+	-('17485', '31957'): 1
+	-('17838', '33070'): 1
+	-('18795', '25386'): 1
+	-('19318', '27838'): 1
+	-('19513', '33840'): 1
+	-('19983', '24765'): 1
+	-('20147', '25233'): 1
+	-('20233', '26419'): 1
+	-('20432', '27249'): 1
+	-('20806', '33297'): 1
+	-('20832', '23554'): 1
+	-('20847', '27409'): 1
+	-('21007', '32545'): 1
+	-('21489', '23438'): 1
+	-('21853', '23465'): 1
+	-('22295', '26902'): 1
+	-('22471', '24653'): 1
+	-('23939', '29201'): 1
+	-('24196', '30151'): 1
+	-('24758', '32765'): 1
+	-('25239', '31131'): 1
+	-('25274', '106111'): 1
+	-('25941', '26623'): 1
+	-('26269', '31644'): 1
+	-('26290', '27540'): 1
+	-('28431', '33286'): 1
+	-('28440', '30362'): 1
+	-('28508', '106282'): 1
+	-('29046', '32542'): 1
+	-('30061', '102608'): 1
+	-('30951', '34443'): 1
+	-('31077', '32538'): 1
+	-('34503', '35155'): 1
+	-('35587', '97334'): 1
+	-('35594', '94406'): 1
+	-('36907', '105636'): 1
+	-('38650', '103065'): 1
+	-('39723', '96545'): 1
+	-('40105', '42977'): 1
+	-('41951', '49409'): 1
+	-('42013', '47950'): 1
+	-('42276', '45046'): 1
+	-('42518', '72108'): 1
+	-('45659', '63769'): 1
+	-('45780', '104555'): 1
+	-('46388', '105750'): 1
+	-('46552', '101043'): 1
+	-('47565', '96489'): 1
+	-('48119', '91100'): 1
+	-('48742', '49109'): 1
+	-('50709', '79032'): 1
+	-('51379', '105712'): 1
+	-('51663', '105461'): 1
+	-('52035', '94524'): 1
+	-('52939', '6686123'): 1
+	-('53480', '69735'): 1
+	-('53482', '68379'): 1
+	-('53518', '63472'): 1
+	-('54067', '68580'): 1
+	-('54581', '59622'): 1
+	-('54606', '61769'): 1
+	-('54711', '58391'): 1
+	-('55171', '62039'): 1
+	-('55332', '60245'): 1
+	-('55518', '64953'): 1
+	-('55923', '65050'): 1
+	-('58111', '63146'): 1
+	-('58328', '68814'): 1
+	-('59216', '64901'): 1
+	-('59321', '60685'): 1
+	-('59957', '64872'): 1
+	-('62117', '63035'): 1
+	-('62925', '67458'): 1
+	-('63415', '106142'): 1
+	-('63741', '64468'): 1
+	-('64287', '67878'): 1
+	-('67071', '69371'): 1
+	-('67217', '68721'): 1
+	-('73135', '106333'): 1
+	-('73341', '88762'): 1
+	-('74403', '90538'): 1
+	-('74545', '100325'): 1
+	-('76019', '91042'): 1
+	-('76192', '105835'): 1
+	-('76342', '90904'): 1
+	-('78015', '105919'): 1
+	-('80795', '92353'): 1
+	-('81339', '82182'): 1
+	-('83849', '90089'): 1
+	-('85064', '86997'): 1
+	-('88646', '105879'): 1
+	-('89049', '89800'): 1
+	-('89449', '91812'): 1
+	-('90175', '107927'): 1
+	-('92052', '98661'): 1
+	-('92530', '94265'): 1
+	-('92530', '105540'): 1
+	-('94265', '105540'): 1
+	-('93276', '100924'): 1
+	-('93500', '93857'): 1
+	-('93512', '105865'): 1
+	-('94966', '107263'): 1
+	-('95276', '102672'): 1
+	-('99466', '105888'): 1
+	-('101426', '106447'): 1
+	-('108054', '6680581'): 1
+	-('109205', '109913'): 1
+	-('6680948', '6692547'): 1
+	-('6682335', '6690098'): 1
+	-('6684639', '6692582'): 1
+
+--------------------------------------------------
+
+Dataset: out-dblp_proceedings
+
+Loading data...
+
+Graph created in 0.006006002426147461 seconds! Graph with 25 nodes and 18 edges
+
+
+Results calculated in 0.0 seconds
+Author with the most publications written by himself until 2020:
+	-Peter C. Lockemann: 1
+	-Bruce L. Jacob: 1
+	-Vivek K. Singh 0001: 1
+	-Javier L�pez 0001: 1
+
+
+Finding diameter...
+	Diameter for graph with publications until 2020: 2
+
+Results calcualted in 0.0010001659393310547 seconds
+	-No pair of articles shares an author until 2020!
+
+--------------------------------------------------
+
+Union graph created! Graph with 11099647 nodes and 21171144 edges
+
+Results calculated in 17.041510343551636 seconds
+Author with the most publications written by himself until 2020:
+	-T. D. Wilson 0001: 347
+
+
+Finding diameter...
+Lower bound: 55 - Upper bound: 56
+	Diameter for graph with publications until 2020: 55
+
+Results calcualted in 33.71465587615967 seconds
+Pair of publications sharing the most authors until 1980:
+	-('8109028', '8586209'): 13
+Author graph created! Graph with 4543689 nodes and 23673637 edges
+
+Results calcualted in 98.11016821861267 seconds
+Pair of authors with most collaboration:
+	-('Makoto Takizawa 0001', 'Tomoya Enokido'): 425
+
+--------------------------------------------------
+

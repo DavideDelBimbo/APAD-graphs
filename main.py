@@ -5,6 +5,18 @@ import matplotlib.pyplot as plt
 import time
 from tqdm import tqdm
 
+'''
+QUESTION 1:	L-Who is the author who wrote more papers by himself/herself?
+
+QUESTION 2:	2-Compute exactly the diameter of G
+
+QUESTION 3:	III-Which is the pair of papers that share the largest number of authors?
+
+QUESTION 4: Build the union graph and repeat the chosen questions.
+Build also the author graph, whose nodes are only authors and two authors are connected if they did a publication together (considering all the files). Answer to the following question:
+Which is the pair of authors who collaborated the most between themselves?
+'''
+
 class DBLP:
     def __init__(self, graph = nx.Graph(), dataset_name: str = ""):
         self.graph: nx.Graph = graph
@@ -83,9 +95,6 @@ class DBLP:
         
         end = time.time()
         print(f"Graph created in {end-start} seconds! {self.graph}")
-    
-
-    #def add_node_to_graph(self, id: str):
 
 
     # Function to return author(s) who wrote more papers by himself within a certain year 
@@ -127,6 +136,7 @@ class DBLP:
         # Find the largest connected component graph
         largest_connected_component_graph: nx.Graph = nx.subgraph(self.graph, max(nx.connected_components(filtered_graph), key=len, default=None))
 
+        #print(f"Networkx diameter: {nx.approximation.diameter(largest_connected_component_graph)}\n")
         # Get node with maximum degree to start algorithm (if not exists the largest connected componento graph return diameter 0)
         start_node = max(nx.degree(largest_connected_component_graph), key = lambda x : x[1], default=None)
         if start_node:
@@ -187,7 +197,50 @@ class DBLP:
 
         return [(max_shared_pair, max_shared_value) for max_shared_pair in max_shared_pairs]
     
+    def ex_4(self):
+        start = time.time()
+
+        # Get all articles nodes
+        articles = [node for node in self.graph.nodes if self.graph.nodes[node]["bipartite"] == 0]
+        
+        # Create the author graph
+        author_graph: nx.Graph = nx.Graph()
+
+        pair_counts = {}
+        for article in tqdm(articles, desc="Create author graph and find pair with most collaborations"):
+            # Getting neighbors authors that collaborates
+            neighbors_authors = list(self.graph[article])
+
+            # Add authors to graph
+            author_graph.add_nodes_from(neighbors_authors)
+
+            # Get combination of authors that collaborates
+            neighbors_author_pairs = list(itertools.combinations(neighbors_authors, r=2))
+
+            # Add edges to graph between authors that collaborates
+            author_graph.add_edges_from(neighbors_author_pairs)
+
+            # Count number of times a pair of authors that collaborates
+            for pair in neighbors_author_pairs:
+                pair_counts[pair] = pair_counts.get(pair, 0) + 1
+
+        print(f"Author graph created! {author_graph}\n")
+
+        # Get pair of authors that most collaborates (i.e. pairs with maximum count)
+        max_collaboration_value = max(pair_counts.values(), default=0)
+        max_collaboration_pairs = [(self.node_id_to_data_id[pair[0]], self.node_id_to_data_id[pair[1]]) for pair, count in pair_counts.items() if count == max_collaboration_value]
+
+        end = time.time()
+        print(f"Results calcualted in {end-start} seconds")
+
+        return [(max_collaboration_pair, max_collaboration_value) for max_collaboration_pair in max_collaboration_pairs]
+
+
 def main():
+    import sys
+    f = open("results.txt", 'w')
+    sys.stdout = f
+
     path = './DBLP/'
     files_name = ['out-dblp_article', 'out-dblp_book', 'out-dblp_incollection', 'out-dblp_inproceedings', 'out-dblp_mastersthesis', 'out-dblp_phdthesis', 'out-dblp_proceedings']
     datasets_name = ['article', 'book', 'incollection', 'inproceedings', 'mastersthesis', 'phdthesis', 'proceedings']
@@ -229,40 +282,25 @@ def main():
         max_shared_publications = dblp_list[i].ex_3(threshold_year=threshold_year)
         if max_shared_publications:
             print(f"Pair of publications sharing the most authors until {threshold_year}:")
-            [print(f"\t{pair}: {count}") for (pair, count) in max_shared_publications]
+            [print(f"\t-{pair}: {count}") for (pair, count) in max_shared_publications]
         else:
-            print(f"\t-No pair of articles shares an author until {threshold_year}!")
+            print(f"\t No pair of articles shares an author until {threshold_year}!")
         
         print("\n--------------------------------------------------\n")
 
-    # Crate union graph renaming nodes Graph.clear()
+    # Crate union graph renaming nodes
     union_graph: nx.Graph() = nx.union_all([dblp_dataset.graph for dblp_dataset in dblp_list], datasets_name)
     union_dblp = DBLP(graph=union_graph, dataset_name="union")
     print(f"Union graph created! {union_dblp.graph}\n")
 
-    union_dblp.node_id_to_data_id = dict(itertools.chain(*map(lambda dblp_dataset, dataset_name: ((f"{dataset_name}{k}", v) for k, v in dblp_dataset.node_id_to_data_id.items()), dblp_list, datasets_name)))
-    
+    union_dblp.node_id_to_data_id = dict(itertools.chain(
+        *map(lambda dblp_dataset, dataset_name: ((f"{dataset_name}{k}", v)
+                 for k, v in dblp_dataset.node_id_to_data_id.items()), dblp_list, datasets_name)))
+
+    # Clean graphs
     for dblp_dataset in dblp_list:
         dblp_dataset.graph.clear()
-    '''
-    # Merge dictionaries in union graph 
-    for dblp_dataset, dataset_name in zip(dblp_list, datasets_name):
-
-        # clear graph to free ram memory space
-        dblp_dataset.graph.clear()
-        
-        # replace the old nodes id to new renamed nodes id
-        # for example mastersthesis graph nodes id are renamed as mastersthesisx, for each x belongs to N
-        mappings_from_old_node_id_to_new_node_id = {}
-        for node_id in dblp_dataset.node_id_to_data_id:
-            mappings_from_old_node_id_to_new_node_id[node_id] = dataset_name + str(node_id)
-        dblp_dataset.node_id_to_data_id = dict((mappings_from_old_node_id_to_new_node_id[node_id], value) for (node_id, value) in dblp_dataset.node_id_to_data_id.items())
     
-    # Updates the node_id_to_data_id dictionary with the elements from every dblp_dataset node_id_to_data_id dictionary object
-    for dblp_dataset in dblp_list:
-        union_dblp.node_id_to_data_id.update(dblp_dataset.node_id_to_data_id)
-
-    '''
     # Exercise 1
     threshold_year = 2020
     max_himself = union_dblp.ex_1(threshold_year=threshold_year)
@@ -289,53 +327,17 @@ def main():
     else:
         print(f"\tNo pair of articles shares an author until {threshold_year}!")
     
+    # Exercise 4
+    max_collaboration_authors = union_dblp.ex_4()
+    if max_collaboration_authors:
+        print(f"Pair of authors with most collaboration:")
+        [print(f"\t-{pair}: {count}") for (pair, count) in max_collaboration_authors]
+    else:
+        print(f"\tNo pair of authors collaborates!")
+    
     print("\n--------------------------------------------------\n")
+    
+    f.close()
 
 if __name__ == "__main__":
     main()
-
-
-# TODO vedere se la 3 si puo fare meglio evitando di memorizzare tutto (inoltre vedere anche se ci più coppie che condividono lo stesso numero max)
-# TODO esercizio 4
-# TODO riscrivere meglio le variabili i commenti e i print
-
-
-'''
-Fields id;author;author-aux;author-orcid;booktitle;cdate;cdrom;cite;cite-label;crossref;editor;editor-orcid;ee;ee-type;i;journal;key;mdate;month;note;note-label;note-type;number;pages;publisher;publnr;publtype;sub;sup;title;title-bibtex;tt;url;volume;year
-4105295;Clement T. Yu|Hai He|Weiyi Meng|Yiyao Lu|Zonghuan Wu;;;;;;;;;;;https://doi.org/10.1007/s11280-006-0010-9;;;World Wide Web;conf/www/HeMLYW07;2017-05-23;;;;;2;133-155;;;;;;Towards Deeper Understanding of the Search Interfaces of the Deep Web.;;;db/journals/www/www10.html#HeMLYW07;;2007
-'''
-
-
-'''
-Note that the field author contains the list of the authors of the publications separated by "|"
-
-For each of the 7 dataset build the bipartite graph authors vs publication using Networkx. 
-In this graph each publication is a node and also each author correspond to a node. 
-There is an edge (undirected) between an author and a publication if the author authored the publication.
-
-
-Tip: each publication and each author will have a number in the graph.
-Build a dictionary associating to each publication or author the number of the corresponding node in the graph.
-Also, build the reverse dictionary (or store as an attribute on the nodes) which says for each node number the corresponding publication id or author.
-'''
-
-'''
-it is convenient to put a label on each publication, which tells its year, title, number of pages, publisher, venue.
-For venue we mean: 
-journal (for out-dblp_article.csv), 
-booktitle (for out-dblp_incollection.csv and out-dblp_inproceedings.csv),
-title (for out-dblp_proceedings.csv)
-'''
-
-'''
-For each graph, considering only the publications up to year x with x in {1960,1970,1980,1990,2000,2010,2020,2023}:
-QUESTION 1:	L- Who is the author who wrote more papers by himself/herself?
-
-QUESTION 2:	2-Compute exactly the diameter of G
-
-QUESTION 3:	III-Which is the pair of papers that share the largest number of authors?
-
-QUESTION 4: Build the union graph and repeat the chosen questions.
-Build also the author graph, whose nodes are only authors and two authors are connected if they did a publication together (considering all the files). Answer to the following question:
-Which is the pair of authors who collaborated the most between themselves?
-'''
