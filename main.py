@@ -2,17 +2,18 @@ import itertools
 import networkx as nx
 import pandas as pd
 import matplotlib.pyplot as plt
+import time
 from tqdm import tqdm
 
 class DBLP:
-    def __init__(self, graph = nx.Graph(), dataset: str = ""):
+    def __init__(self, graph = nx.Graph(), dataset_name: str = ""):
         self.graph: nx.Graph = graph
         
         # Dictionaries to store node numbers and corresponding IDs
         self.data_id_to_node_id: dict = {} # Dictionary linking pubblication or author to relative node number
         self.node_id_to_data_id: dict = {} # Dictionary linking node number to relative pubblication or author
 
-        self.dataset: str = dataset # dataset name
+        self.dataset_name: str = dataset_name # dataset name
     
 
     # Function to plot graph
@@ -44,6 +45,7 @@ class DBLP:
 
     # Function to create a bipartite graph
     def create_graph_bipartite(self, data: pd.DataFrame):
+        start = time.time()
         for row in tqdm(data.itertuples(index=False), desc="Create graph"):
             publication = row.id
             
@@ -51,21 +53,21 @@ class DBLP:
             labels = {
                     "year": row.year.split('|')[0], 
                     "title": row.title, 
-                    "pages": row.pages if self.dataset != "mastersthesis" else None,
+                    "pages": row.pages if self.dataset_name != "mastersthesis" else None,
                     }
             
-            if self.dataset == "inproceedings":
+            if self.dataset_name == "inproceedings":
                 labels["publisher"] = row.editor
-            elif self.dataset == "mastersthesis":
+            elif self.dataset_name == "mastersthesis":
                 labels["publisher"] = row.school
             else:
                 labels["publisher"] = row.publisher
                 
-            if self.dataset == "article":
+            if self.dataset_name == "article":
                 labels["venue"] = row.journal
-            elif self.dataset == "incollection" or self.dataset == "inproceedings":
+            elif self.dataset_name == "incollection" or self.dataset_name == "inproceedings":
                 labels["venue"] = row.booktitle
-            elif self.dataset == "proceedings":
+            elif self.dataset_name == "proceedings":
                 labels["venue"] = row.title
             
             # Add publication node to graph
@@ -79,7 +81,8 @@ class DBLP:
                 # Add unidrected edge between author and publication
                 self.graph.add_edge(self.data_id_to_node_id[author], self.data_id_to_node_id[publication])
         
-        print(f"Graph created! {self.graph}")
+        end = time.time()
+        print(f"Graph created in {end-start} seconds! {self.graph}")
     
 
     #def add_node_to_graph(self, id: str):
@@ -87,6 +90,7 @@ class DBLP:
 
     # Function to return author(s) who wrote more papers by himself within a certain year 
     def ex_1(self, threshold_year: int):
+        start = time.time()
         authors_count = {} # Dictionary for counting number of publications an author has written by himself
 
         publications = [node for node in self.graph.nodes if self.graph.nodes[node]["bipartite"] == 0]
@@ -102,12 +106,17 @@ class DBLP:
 
         # Get the maximum number of publications written by a single author
         max_publications_count = max(authors_count.values(), default=0)
-        
+
+        end = time.time()
+        print(f"Results calculated in {end-start} seconds")
+
         # Return all author who written the maximum number of publications by himself
         return [(self.node_id_to_data_id[author_node_id], count) for author_node_id, count in authors_count.items() if count == max_publications_count]
 
     # Function to return exact diameter of graph
     def ex_2(self, threshold_year: int):
+        start = time.time()
+
         # Remove the pubblication with year largest than threshold
         publications_to_remove = [node for node in self.graph.nodes
                                   if self.graph.nodes[node]["bipartite"] == 0
@@ -116,10 +125,14 @@ class DBLP:
         filtered_graph.remove_nodes_from(publications_to_remove)
 
         # Find the largest connected component graph
-        largest_connected_component_graph: nx.Graph = nx.subgraph(self.graph, max(nx.connected_components(filtered_graph), key=len, default=0))
+        largest_connected_component_graph: nx.Graph = nx.subgraph(self.graph, max(nx.connected_components(filtered_graph), key=len, default=None))
 
-        # Get node with maximum degree to start algorithm
-        start_node = max(nx.degree(largest_connected_component_graph), key = lambda x : x[1])[0]
+        # Get node with maximum degree to start algorithm (if not exists the largest connected componento graph return diameter 0)
+        start_node = max(nx.degree(largest_connected_component_graph), key = lambda x : x[1], default=None)
+        if start_node:
+            start_node = start_node[0] 
+        else:
+            return 0
 
         # Set lower bound and upper bound
         level = nx.eccentricity(largest_connected_component_graph, v=start_node)
@@ -141,10 +154,15 @@ class DBLP:
                 upper_bound = 2 * (level - 1)
             level = level - 1
             print(f"Lower bound: {lower_bound} - Upper bound: {upper_bound}")
+
+        end = time.time()
+        print(f"Results calculated in {end-start} seconds")
         return lower_bound
         
     # Function to return pair of publications shared maximum number of authors
     def ex_3(self, threshold_year: int):
+        start = time.time()
+
         # Get all authors nodes
         authors = [node for node in self.graph.nodes if self.graph.nodes[node]["bipartite"] == 1]
 
@@ -160,24 +178,26 @@ class DBLP:
             for pair in publication_pairs:
                 pair_counts[pair] = pair_counts.get(pair, 0) + 1
         
-        
         # Get pair of publications who shared maximum number of authors (i.e. pairs with maximum count)
-        max_shared_pair = max(pair_counts, key=pair_counts.get, default=None)
+        max_shared_value = max(pair_counts.values(), default=0)
+        max_shared_pairs = [(self.node_id_to_data_id[pair[0]], self.node_id_to_data_id[pair[1]]) for pair, count in pair_counts.items() if count == max_shared_value]
 
-        return  max_shared_pair
+        end = time.time()
+        print(f"Results calcualted in {end-start} seconds")
 
+        return [(max_shared_pair, max_shared_value) for max_shared_pair in max_shared_pairs]
     
 def main():
     path = './DBLP/'
     files_name = ['out-dblp_article', 'out-dblp_book', 'out-dblp_incollection', 'out-dblp_inproceedings', 'out-dblp_mastersthesis', 'out-dblp_phdthesis', 'out-dblp_proceedings']
     datasets_name = ['article', 'book', 'incollection', 'inproceedings', 'mastersthesis', 'phdthesis', 'proceedings']
-    dblp_list = [DBLP(graph=nx.Graph(), dataset=dataset_name) for _, dataset_name in zip(files_name, datasets_name)]
+    dblp_list = [DBLP(graph=nx.Graph(), dataset_name=dataset_name) for _, dataset_name in zip(files_name, datasets_name)]
     
-    nrows = 40
+    nrows = None
     for i, file_name in enumerate(files_name):
-        print(f"{file_name}\n\n") 
+        print(f"Dataset: {file_name}\n") 
         # Read csv file and create pandas Serie
-        print("Loading data...")
+        print("Loading data...\n")
         data = pd.read_csv(f'{path + file_name}.csv', sep=';', dtype=str, nrows=nrows)
 
         # Remove rows with NaN values in the 'author' field
@@ -185,32 +205,46 @@ def main():
 
         dblp_list[i].create_graph_bipartite(data)
 
-        '''
+        print("\n")
+        
         # Exercise 1
         threshold_year = 2020
-        max_himself = dblp[i].ex_1(threshold_year=threshold_year)
+        max_himself = dblp_list[i].ex_1(threshold_year=threshold_year)
         if max_himself:
-            [print(f"{author}: {count}") for author, count in max_himself]
+            print(f"Author with the most publications written by himself unitl {threshold_year}:")
+            [print(f"\t-{author}: {count}") for author, count in max_himself]
         else:
-            print(f"No author has written a publication by himself until {threshold_year}!")
+            print(f"\tNo author has written a publication by himself until {threshold_year}!")
+        
+        print("\n")
 
         # Exercise 2
         threshold_year = 2020
-        diameter = dblp[i].ex_2(threshold_year=threshold_year)
-        print(f"Diameter: {diameter}")
+        print("Finding diameter...")
+        diameter = dblp_list[i].ex_2(threshold_year=threshold_year)
+        print(f"\tDiameter for graph with publications until {threshold_year}: {diameter}\n")
 
         # Exercise 3
         threshold_year = 2020
-        max_shared_publications = dblp[i].ex_3(threshold_year=threshold_year)
-        print(f"Coppia di articoli che condivide il maggior numero di autori: {max_shared_publications}")
-        '''
-        print("--------------------------------------------")
+        max_shared_publications = dblp_list[i].ex_3(threshold_year=threshold_year)
+        if max_shared_publications:
+            print(f"Pair of publications sharing the most authors until {threshold_year}:")
+            [print(f"\t{pair}: {count}") for (pair, count) in max_shared_publications]
+        else:
+            print(f"\t-No pair of articles shares an author until {threshold_year}!")
+        
+        print("\n--------------------------------------------------\n")
 
     # Crate union graph renaming nodes Graph.clear()
     union_graph: nx.Graph() = nx.union_all([dblp_dataset.graph for dblp_dataset in dblp_list], datasets_name)
-    union_dblp = DBLP(graph=union_graph)
-    print(f"Union graph created! {union_dblp.graph}")
+    union_dblp = DBLP(graph=union_graph, dataset_name="union")
+    print(f"Union graph created! {union_dblp.graph}\n")
 
+    union_dblp.node_id_to_data_id = dict(itertools.chain(*map(lambda dblp_dataset, dataset_name: ((f"{dataset_name}{k}", v) for k, v in dblp_dataset.node_id_to_data_id.items()), dblp_list, datasets_name)))
+    
+    for dblp_dataset in dblp_list:
+        dblp_dataset.graph.clear()
+    '''
     # Merge dictionaries in union graph 
     for dblp_dataset, dataset_name in zip(dblp_list, datasets_name):
 
@@ -228,71 +262,34 @@ def main():
     for dblp_dataset in dblp_list:
         union_dblp.node_id_to_data_id.update(dblp_dataset.node_id_to_data_id)
 
-
-    '''
-    a = {'a' : 0, 'b': 1}
-    b = {'c' : 2, 'b': 4}
-    for i in a:
-        i = a["article" + str(i)]
-    b.update(a)
-    print(b)
-    
-    
-    for node in union_graph.nodes:
-        # article
-        if union_graph.nodes[node]['bipartite'] == 0:
-            if union_graph.nodes[node]['labels']['id'] is not union_dblp.id_to_node:
-                union_dblp.id_to_node[union_graph.nodes[node]['labels']['id']] = node
-            # duplicate
-            else:
-                union_dblp.id_to_node["qualcosa"+union_graph.nodes[node]['labels']['id']] = node
-        # author
-        else:
-            if union_graph.nodes[node]['labels']['id'] is not union_dblp.id_to_node:
-                union_dblp.id_to_node[union_graph.nodes[node]['labels']['id']] = node
-            else:
-    union_dblp.id_to_node = 
-    
-        a = {'a' : 0, 'b' : 1}
-        b = {'c' : 2, 'b':4}
-
-        a.update(b)
-        print(a)
-        {'a': 0, 'b': 4, 'c': 2}
-    
-
-    a = {'a' : 0, 'b': 1}
-    b = {'c' : 2, 'b': 4}
-    for i in a:
-        a[i] = "article" + str(a[i])
-        a.update(b)
-    print(a)
-
-
-
-    for dblp_dataset in dblp:
-        for key in dblp_dataset.id_to_node:
-            dblp_dataset.id_to_node[key] +
-        
-        union_dblp.id_to_node.update(dblp_dataset.id_to_node)
     '''
     # Exercise 1
     threshold_year = 2020
     max_himself = union_dblp.ex_1(threshold_year=threshold_year)
     if max_himself:
-        [print(f"{author}: {count}") for author, count in max_himself]
+        print(f"Author with the most publications written by himself unitl {threshold_year}:")
+        [print(f"\t-{author}: {count}") for author, count in max_himself]
     else:
-        print(f"No author has written an publication by himself until {threshold_year}!")
+        print(f"\tNo author has written an publication by himself until {threshold_year}!")
+
+    print("\n")
 
     # Exercise 2
     threshold_year = 2020
+    print("Finding diameter...")
     diameter = union_dblp.ex_2(threshold_year=threshold_year)
-    print(f"Diameter: {diameter}")
+    print(f"\tDiameter for graph with publications until {threshold_year}: {diameter}\n")
 
     # Exercise 3
-    threshold_year = 2020
+    threshold_year = 1980
     max_shared_publications = union_dblp.ex_3(threshold_year=threshold_year)
-    print(f"Coppia di articoli che condivide il maggior numero di autori: {max_shared_publications}")
+    if max_shared_publications:
+        print(f"Pair of publications sharing the most authors until {threshold_year}:")
+        [print(f"\t-{pair}: {count}") for (pair, count) in max_shared_publications]
+    else:
+        print(f"\tNo pair of articles shares an author until {threshold_year}!")
+    
+    print("\n--------------------------------------------------\n")
 
 if __name__ == "__main__":
     main()
