@@ -2,11 +2,11 @@ Dataset: out-dblp_article
 
 Loading data...
 
-Graph created in 54.524672746658325 seconds! Graph with 5338788 nodes and 10210962 edges
+Graph created in 63.36202001571655 seconds! Graph with 5338788 nodes and 10210962 edges
 
 
-Results calculated in 5.89227032661438 seconds
-Author with the most publications written by himself until 2020:
+Results calculated in 6.663640022277832 seconds
+Author with the most publications written by himself unitl 2020:
 	-T. D. Wilson 0001: 347
 
 
@@ -14,10 +14,10 @@ Finding diameter...
 Lower bound: 46 - Upper bound: 50
 Lower bound: 46 - Upper bound: 48
 Lower bound: 46 - Upper bound: 46
-Results calculated in 438.280558347702 seconds
+Results calculated in 512.732913017273 seconds
 	Diameter for graph with publications until 2020: 46
 
-Results calcualted in 71.48201274871826 seconds
+Results calcualted in 80.72246766090393 seconds
 Pair of publications sharing the most authors until 2020:
 	-('7834844', '8298828'): 287
 
@@ -27,20 +27,20 @@ Dataset: out-dblp_book
 
 Loading data...
 
-Graph created in 0.11075615882873535 seconds! Graph with 38269 nodes and 29039 edges
+Graph created in 0.12117600440979004 seconds! Graph with 38269 nodes and 29039 edges
 
 
-Results calculated in 0.042246103286743164 seconds
-Author with the most publications written by himself until 2020:
+Results calculated in 0.045363664627075195 seconds
+Author with the most publications written by himself unitl 2020:
 	-Andrew S. Tanenbaum: 20
 
 
 Finding diameter...
 Lower bound: 28 - Upper bound: 28
-Results calculated in 0.1548922061920166 seconds
+Results calculated in 0.16753506660461426 seconds
 	Diameter for graph with publications until 2020: 28
 
-Results calcualted in 0.06007981300354004 seconds
+Results calcualted in 0.06246232986450195 seconds
 Pair of publications sharing the most authors until 2020:
 	-('6672462', '6674144'): 8
 
@@ -50,11 +50,11 @@ Dataset: out-dblp_incollection
 
 Loading data...
 
-Graph created in 0.41352081298828125 seconds! Graph with 140224 nodes and 138403 edges
+Graph created in 0.4951601028442383 seconds! Graph with 140224 nodes and 138403 edges
 
 
-Results calculated in 0.1396784782409668 seconds
-Author with the most publications written by himself until 2020:
+Results calculated in 0.1640489101409912 seconds
+Author with the most publications written by himself unitl 2020:
 	-Gerrit Bleumer: 71
 
 
@@ -67,10 +67,10 @@ Lower bound: 66 - Upper bound: 72
 Lower bound: 66 - Upper bound: 70
 Lower bound: 66 - Upper bound: 68
 Lower bound: 66 - Upper bound: 66
-Results calculated in 34.93998193740845 seconds
+Results calculated in 39.78940987586975 seconds
 	Diameter for graph with publications until 2020: 66
 
-Results calcualted in 0.2932305335998535 seconds
+Results calcualted in 0.2968721389770508 seconds
 Pair of publications sharing the most authors until 2020:
 	-('6678551', '6697156'): 16
 
@@ -80,19 +80,20 @@ Dataset: out-dblp_inproceedings
 
 Loading data...
 
-Graph created in 46.21912169456482 seconds! Graph with 5362529 nodes and 10682633 edges
+Graph created in 54.66125416755676 seconds! Graph with 5362529 nodes and 10682633 edges
 
 
-Results calculated in 5.751744031906128 seconds
-Author with the most publications written by himself until 2020:
+Results calculated in 6.159005403518677 seconds
+Author with the most publications written by himself unitl 2020:
 	-Ichiro Satoh: 116
 
 
 Finding diameter...
 Lower bound: 55 - Upper bound: 56
+Results calculated in 360.56157636642456 seconds
 	Diameter for graph with publications until 2020: 55
 
-Results calcualted in 108.89369344711304 seconds
+Results calcualted in 116.92173886299133 seconds
 Pair of publications sharing the most authors until 2020:
 	-('4095546', '4099061'): 74
 
@@ -102,12 +103,12 @@ Dataset: out-dblp_mastersthesis
 
 Loading data...
 
-Graph created in 0.0035195350646972656 seconds! Graph with 42 nodes and 21 edges
+Graph created in 0.0063970088958740234 seconds! Graph with 42 nodes and 21 edges
 
 
-Results calculated in 0.0 seconds
-Author with the most publications written by himself until 2020:
-	-Tatu Ylï¿½nen: 1
+Results calculated in 0.001989126205444336 seconds
+Author with the most publications written by himself unitl 2020:
+	-Tatu Ylönen: 1
 	-Peter Van Roy: 1
 	-Jiwei Li: 1
 	-Martin Monperrus: 1
@@ -131,10 +132,11 @@ Author with the most publications written by himself until 2020:
 
 
 Finding diameter...
+Results calculated in 0.0 seconds
 	Diameter for graph with publications until 2020: 1
 
-Results calcualted in 0.0010006427764892578 seconds
-	-No pair of articles shares an author until 2020!
+Results calcualted in 0.0 seconds
+	 No pair of articles shares an author until 2020!
 
 --------------------------------------------------
 
@@ -142,18 +144,19 @@ Dataset: out-dblp_phdthesis
 
 Loading data...
 
-Graph created in 0.5789153575897217 seconds! Graph with 219770 nodes and 110068 edges
+Graph created in 0.6639156341552734 seconds! Graph with 219770 nodes and 110068 edges
 
 
-Results calculated in 0.30004191398620605 seconds
-Author with the most publications written by himself until 2020:
+Results calculated in 0.2910759449005127 seconds
+Author with the most publications written by himself unitl 2020:
 	-Mohammad Jafari: 3
 
 
 Finding diameter...
+Results calculated in 0.7717304229736328 seconds
 	Diameter for graph with publications until 2020: 4
 
-Results calcualted in 0.24741458892822266 seconds
+Results calcualted in 0.27173447608947754 seconds
 Pair of publications sharing the most authors until 2020:
 	-('4066', '5575'): 1
 	-('4346', '95784'): 1
@@ -345,42 +348,44 @@ Dataset: out-dblp_proceedings
 
 Loading data...
 
-Graph created in 0.006006002426147461 seconds! Graph with 25 nodes and 18 edges
+Graph created in 0.0049054622650146484 seconds! Graph with 25 nodes and 18 edges
 
 
 Results calculated in 0.0 seconds
-Author with the most publications written by himself until 2020:
+Author with the most publications written by himself unitl 2020:
 	-Peter C. Lockemann: 1
 	-Bruce L. Jacob: 1
 	-Vivek K. Singh 0001: 1
-	-Javier Lï¿½pez 0001: 1
+	-Javier López 0001: 1
 
 
 Finding diameter...
+Results calculated in 0.001514434814453125 seconds
 	Diameter for graph with publications until 2020: 2
 
-Results calcualted in 0.0010001659393310547 seconds
-	-No pair of articles shares an author until 2020!
+Results calcualted in 0.0 seconds
+	 No pair of articles shares an author until 2020!
 
 --------------------------------------------------
 
 Union graph created! Graph with 11099647 nodes and 21171144 edges
 
-Results calculated in 17.041510343551636 seconds
-Author with the most publications written by himself until 2020:
+Results calculated in 17.44448184967041 seconds
+Author with the most publications written by himself unitl 2020:
 	-T. D. Wilson 0001: 347
 
 
 Finding diameter...
 Lower bound: 55 - Upper bound: 56
+Results calculated in 523.9815263748169 seconds
 	Diameter for graph with publications until 2020: 55
 
-Results calcualted in 33.71465587615967 seconds
-Pair of publications sharing the most authors until 1980:
-	-('8109028', '8586209'): 13
+Results calcualted in 749.5499308109283 seconds
+Pair of publications sharing the most authors until 2020:
+	-('7834844', '8298828'): 287
 Author graph created! Graph with 4543689 nodes and 23673637 edges
 
-Results calcualted in 98.11016821861267 seconds
+Results calcualted in 253.709139585495 seconds
 Pair of authors with most collaboration:
 	-('Makoto Takizawa 0001', 'Tomoya Enokido'): 425
 

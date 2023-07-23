@@ -63,9 +63,9 @@ class DBLP:
             
             # Set labels for publication nodes
             labels = {
-                    "year": row.year.split('|')[0], 
-                    "title": row.title, 
-                    "pages": row.pages if self.dataset_name != "mastersthesis" else None,
+                        "year": row.year.split('|')[0], 
+                        "title": row.title, 
+                        "pages": row.pages if self.dataset_name != "mastersthesis" else None,
                     }
             
             if self.dataset_name == "inproceedings":
@@ -158,6 +158,8 @@ class DBLP:
             max_eccentrity_distance_i = max([nx.eccentricity(largest_connected_component_graph, v=node) for node in nodes_distance_i])
 
             if max(lower_bound, max_eccentrity_distance_i) > 2 * (level - 1):
+                end = time.time()
+                print(f"Results calculated in {end-start} seconds")
                 return max(lower_bound, max_eccentrity_distance_i)
             else:
                 lower_bound = max(lower_bound, max_eccentrity_distance_i)
@@ -319,7 +321,7 @@ def main():
     print(f"\tDiameter for graph with publications until {threshold_year}: {diameter}\n")
 
     # Exercise 3
-    threshold_year = 1980
+    threshold_year = 2020
     max_shared_publications = union_dblp.ex_3(threshold_year=threshold_year)
     if max_shared_publications:
         print(f"Pair of publications sharing the most authors until {threshold_year}:")
