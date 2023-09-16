@@ -294,11 +294,15 @@ def main():
     union_graph: nx.Graph() = nx.union_all([dblp_dataset.graph for dblp_dataset in dblp_list], datasets_name)
     union_dblp = DBLP(graph=union_graph, dataset_name="union")
     print(f"Union graph created! {union_dblp.graph}\n")
-
+    
+    # Update dictionaries
     union_dblp.node_id_to_data_id = dict(itertools.chain(
-        *map(lambda dblp_dataset, dataset_name: ((f"{dataset_name}{k}", v)
-                 for k, v in dblp_dataset.node_id_to_data_id.items()), dblp_list, datasets_name)))
-
+        *map(lambda dblp_dataset, dataset_name: ((f"{dataset_name}{k}", v) for k, v in dblp_dataset.node_id_to_data_id.items()),
+            dblp_list, datasets_name
+            )
+        ))
+    union_dblp.data_id_to_node_id = {v: k for k, v in union_dblp.node_id_to_data_id.items()}
+    
     # Clean graphs
     for dblp_dataset in dblp_list:
         dblp_dataset.graph.clear()
